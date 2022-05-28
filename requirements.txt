@@ -4,3 +4,5 @@ boto3==1.12.23
 boto==2.49.0
 pycryptodome==3.9.7
 markupsafe==2.0.1
+Flask-Cors
+simplejson

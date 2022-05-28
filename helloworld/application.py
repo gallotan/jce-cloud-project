@@ -1,9 +1,15 @@
 #!flask/bin/python
 import json
-from flask import Flask, Response
+from flask import Flask, Response, request
 from helloworld.flaskrun import flaskrun
+import boto3
+from flask_cors import CORS
+import simplejson as json
+
 
 application = Flask(__name__)
+CORS(application, resources={r"/*": {"origins": "*"}}) 
+
 
 @application.route('/', methods=['GET'])
 def get():
