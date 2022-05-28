@@ -1,0 +1,5 @@
+/build
+/dist
+/helloworld.egg-info
+/.eggs
+/.venv
