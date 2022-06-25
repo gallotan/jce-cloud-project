@@ -65,7 +65,7 @@ def uploadImage():
     s3 = boto3.resource('s3', region_name='us-east-1')
     image_path  = "%s.jpg" %  image_id
     s3.Bucket(bucket).upload_fileobj(image_file, image_path, ExtraArgs={'ACL': 'public-read', 'ContentType': 'image/jpeg'}) 
-    url = 'https://cloud-management-project-jce.s3.amazonaws.com'+ image_path
+    url = 'https://cloud-management-project-jce.s3.amazonaws.com/'+ image_path
     
     return {"url": url}
 
