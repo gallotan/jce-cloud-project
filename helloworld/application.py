@@ -61,7 +61,7 @@ def uploadImage():
     bucket = 'cloud-management-project-jce'
     image_file = request.files['image_file']
     image_id = (str(round(random.uniform(1, 10000000000000))))
-
+    
     s3 = boto3.resource('s3', region_name='us-east-1')
     image_path  = "%s.jpg" %  image_id
     s3.Bucket(bucket).upload_fileobj(image_file, image_path, ExtraArgs={'ACL': 'public-read', 'ContentType': 'image/jpeg'}) 
