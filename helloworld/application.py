@@ -3,6 +3,8 @@ import json
 from flask import Flask, Response, request
 from helloworld.flaskrun import flaskrun
 import boto3
+from boto3.dynamodb.conditions import Key
+from boto3.dynamodb.conditions import Attr
 from flask_cors import CORS
 import random
 
@@ -24,11 +26,15 @@ def post():
 
 
 #Get Predictions (DynamoDB)
-@application.route('/getPredictions', methods=['GET'])
+@application.route('/getPredictions', methods=['POST'])
 def getPredictions():
+    data = request.data
+    data_json = json.loads(data)
+    user_id = data['user_id']    
+
     dynamodb = boto3.resource('dynamodb', region_name='us-east-1')
     table = dynamodb.Table('predictions')
-    response = table.scan()
+    response = table.scan(FilterExpression = Attr('user_id').eq(user_id))
 
     return Response(json.dumps(response['Items']), mimetype='application/json', status=200)    
 # curl http://localhost:8000/getPredictions
