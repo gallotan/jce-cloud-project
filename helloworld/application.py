@@ -30,8 +30,9 @@ def post():
 def getPredictions():
     data = request.data
     data_json = json.loads(data)
-    user_id = data['user_id']    
-
+    
+    user_id = data_json['user_id']
+    
     dynamodb = boto3.resource('dynamodb', region_name='us-east-1')
     table = dynamodb.Table('predictions')
     response = table.scan(FilterExpression = Attr('user_id').eq(user_id))
