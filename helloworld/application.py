@@ -6,7 +6,6 @@ import boto3
 from flask_cors import CORS
 import random
 
-#import simplejson as json
 
 
 application = Flask(__name__)
@@ -59,15 +58,32 @@ def addPrediction():
 @application.route('/uploadImage', methods=['POST'])
 def uploadImage():
     bucket = 'cloud-management-project-jce'
-    image_file = request.files['image_file']
-    image_id = (str(round(random.uniform(1, 10000000000000))))
+    #image_file = request.files['image_file']
+    #image_id = (str(round(random.uniform(1, 10000000000000))))
     
     s3 = boto3.resource('s3', region_name='us-east-1')
-    image_path  = "%s.jpg" %  image_id
-    s3.Bucket(bucket).upload_fileobj(image_file, image_path, ExtraArgs={'ACL': 'public-read', 'ContentType': 'image/jpeg'}) 
+    image_path = "7464511074.jpg"
+    #image_path  = "%s.jpg" %  image_id
+    #s3.Bucket(bucket).upload_fileobj(image_file, image_path, ExtraArgs={'ACL': 'public-read', 'ContentType': 'image/jpeg'}) 
     url = 'https://cloud-management-project-jce.s3.amazonaws.com/'+ image_path
     
-    return {"url": url}
+    
+    rekognition = boto3.client("rekognition", region_name = 'us-east-1')
+    
+
+    response = rekognition.detect_text(
+    Image={
+        'S3Object': {
+            'Bucket': bucket,
+            'Name': image_path,
+        }
+    }
+    )
+    
+    text_detected = response['TextDetections'][0]['DetectedText']
+    confidence = response['TextDetections'][0]['Confidence']
+
+    return {"url": url, "text_detected":text_detected, "confidence":confidence }
 
 
 if __name__ == '__main__':
